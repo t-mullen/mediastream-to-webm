@@ -381,8 +381,8 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-}).call(this,{"isBuffer":require("../../../../../../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js":42}],3:[function(require,module,exports){
+}).call(this,{"isBuffer":require("../../../../../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js":42}],3:[function(require,module,exports){
 module.exports = require('./lib/ebml/index.js');
 
 },{"./lib/ebml/index.js":6}],4:[function(require,module,exports){
@@ -6198,7 +6198,8 @@ var Duplex = require('readable-stream').Duplex
 var inherits = require('inherits')
 var MediaElementWrapper = require('mediasource')
 var Buffer = require('safe-buffer').Buffer
-var ebml = require('ebml')
+
+var MAX_TIME = 999999999999
 
 inherits(DecodedStream, Duplex)
 
@@ -6212,10 +6213,10 @@ function DecodedStream (opts) {
   self._mimeType = opts.mimeType || 'video/webm; codecs="opus,vp8"'
   self.videoElement = opts.videoElement || document.createElement('video')
 
+  self._clusterCount = 0
+
   self._headerSize = null
   self._header = null
-
-  self._timecodeOffset = null
 
   self._parseSize = 32
   self._parse = self._parseHeaderSize
@@ -6257,6 +6258,7 @@ DecodedStream.prototype._parseHeaderSize = function (chunk) {
 
 DecodedStream.prototype._parseHeader = function (chunk) {
   var self = this
+
   if (!self._header) {
     self._header = chunk // only write the header once
     self.push(chunk)
@@ -6274,26 +6276,14 @@ DecodedStream.prototype._parseClusterSize = function (chunk) {
 
 DecodedStream.prototype._parseCluster = function (chunk) {
   var self = this
-  // HACK: MSE is broken and doesn't handle gaps in timestamps correctly
-  // We just need to read the first timecode we get and shift the video time
 
-  if (self._timecodeOffset == null) {
-    var dec = new ebml.Decoder()
-
-    dec.on('data', function (block) {
-      if (self._timecodeOffset != null) return
-
-      if (block[1].name === 'Timecode') {
-        self._timecodeOffset = block[1].data.readUIntBE(0, block[1].data.length) // timecodes are variable length
-        self.videoElement.currentTime = self._timecodeOffset / 1000
-      }
-    })
-
-    dec.write(chunk)
-    dec.end()
+  // HACK: MSE won't skip timestamp gaps, so we force it to
+  if (self._clusterCount === 1) {
+    self.videoElement.currentTime = MAX_TIME
   }
 
   self.push(chunk)
+  self._clusterCount++
 
   self._parse = self._parseHeaderSize
   self._parseSize = 32
@@ -6301,7 +6291,7 @@ DecodedStream.prototype._parseCluster = function (chunk) {
 
 module.exports = DecodedStream
 
-},{"ebml":3,"inherits":10,"mediasource":13,"readable-stream":23,"safe-buffer":25}],33:[function(require,module,exports){
+},{"inherits":10,"mediasource":13,"readable-stream":23,"safe-buffer":25}],33:[function(require,module,exports){
 var Readable = require('readable-stream').Readable
 var inherits = require('inherits')
 var recorder = require('media-recorder-stream')
