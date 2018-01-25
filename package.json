@@ -1,6 +1,6 @@
 {
   "name": "mediastream-to-webm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WebRTC MediaStreams to live webm data streams.",
   "main": "src/index.js",
   "directories": {
