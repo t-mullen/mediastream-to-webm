@@ -76,5 +76,6 @@ The video element that will be buffered with the decoded webm stream.
 
 ## Notes
 - Currently only works on Chrome (Firefox refuses to accept a webm stream from their own MediaRecorder...)
-- This module is only useful for live streaming. If you want a prerecorded stream, simply use `media-recorder-stream` is enough.
-- Headers are sent with every chunk. This is done because the module assumes you only have an outgoing stream. If you have a stream from clients to broadcaster, it's better to request the headers once per client.
+- This module has additional overhead for live streaming. If you want just want a prerecorded stream, use `media-recorder-stream`.
+- Headers are sent with every chunk and this packaged needs to be decoded. You won't be able to pass the data stream directly into a webm player.
+- Less efficient and versatile than sending MediaStreams over WebRTC. This "dumb" video stream is not meant to be a replacement for the adaptive bitrate, network-aware SRTP protocol used by WebRTC.
