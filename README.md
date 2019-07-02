@@ -1,8 +1,8 @@
 # mediastream-to-webm
 
-Converts MediaStreams to live WebM streams.
+Converts MediaStreams to live WebM streams. Currently only for Chrome.
 
-Allows you to send a single outgoing data stream to many peers.
+Allows you to send video/audio as a single outgoing data stream to many peers.
 
 ## Features
 - Packages webm clusters and headers into standalone chunks that don't require the entire stream.
@@ -11,7 +11,7 @@ Allows you to send a single outgoing data stream to many peers.
 
 ## Install
 ```javascript
-var mtw = require('mediastream-to-webm')
+var MediaStreamToWebm = require('mediastream-to-webm')
 ```
 
 ```html
@@ -22,7 +22,7 @@ var mtw = require('mediastream-to-webm')
 
 ```javascript
 // Wrap your MediaStream into an encoder
-var encodedStream = mtw.EncodedStream(mediaStream)
+var encodedStream = MediaStreamToWebm.EncodedStream(mediaStream)
 
 // The encoded stream is a ReadableStream
 encodedStream.pipe(socket1) 
@@ -32,7 +32,7 @@ encodedStream.pipe(socket2)
 ```
 
 ```javascript
-var decodedStream = mtw.DecodedStream()
+var decodedStream = MediaStreamToWebm.DecodedStream()
 socket.pipe(decodedStream) // pipe the encoded stream into the decoded
 
 // The buffered video element is available for us to watch!
@@ -45,7 +45,7 @@ document.body.appendChild(video)
 ```
 
 ## API
-### `mtw.EncodedStream(mediaStream, opts)`
+### `MediaStreamToWebm.EncodedStream(mediaStream, opts)`
 Encode a MediaStream into a webm data stream.
 
 `mediaStream` - The input MediaStream you want to broadcast.
@@ -59,7 +59,7 @@ Encode a MediaStream into a webm data stream.
 }
 ```
 
-### `mtw.DecodedStream(opts)`
+### `MediaStreamToWebm.DecodedStream(opts)`
 Decode an encoded webm data stream. Decoded data will be buffered into a video element.
 
 `opts` - Options object. Default is:

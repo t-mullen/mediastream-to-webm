@@ -38,14 +38,14 @@ EncodedStream.prototype._read = function () {}
 EncodedStream.prototype._packageChunk = function (header, cluster) {
   var self = this
   if (!self._headerBuffer) {
-    var headerSizeBuffer = Buffer.alloc(32) // first 32 bytes indicate size of header
+    var headerSizeBuffer = Buffer.alloc(4) // first 32 bits indicate size of header
     headerSizeBuffer.writeUInt32BE(header.length)
 
     // store for later (it is the same for every cluster)
     self._headerBuffer = Buffer.concat([headerSizeBuffer, header])
   }
 
-  var clusterSizeBuffer = Buffer.alloc(32) // second 32 bytes indicate size of cluster
+  var clusterSizeBuffer = Buffer.alloc(4) // second 32 bits indicate size of cluster
   clusterSizeBuffer.writeUInt32BE(cluster.length)
 
   return Buffer.concat([self._headerBuffer, clusterSizeBuffer, cluster])

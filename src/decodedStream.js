@@ -22,7 +22,7 @@ function DecodedStream (opts) {
   self._headerSize = null
   self._header = null
 
-  self._parseSize = 32
+  self._parseSize = 4
   self._parse = self._parseHeaderSize
   self._buffer = []
   self._bufferSize = 0
@@ -69,7 +69,7 @@ DecodedStream.prototype._parseHeader = function (chunk) {
   }
 
   self._parse = self._parseClusterSize
-  self._parseSize = 32
+  self._parseSize = 4
 }
 
 DecodedStream.prototype._parseClusterSize = function (chunk) {
@@ -90,7 +90,7 @@ DecodedStream.prototype._parseCluster = function (chunk) {
   self._clusterCount++
 
   self._parse = self._parseHeaderSize
-  self._parseSize = 32
+  self._parseSize = 4
 }
 
 module.exports = DecodedStream
