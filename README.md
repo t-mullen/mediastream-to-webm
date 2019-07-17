@@ -1,5 +1,7 @@
 # mediastream-to-webm
 
+## Temporarily broken - the MediaRecorder API has dramatically changed it's WebM format
+
 Converts MediaStreams to live WebM streams. Currently only for Chrome.
 
 Allows you to send video/audio as a single outgoing data stream to many peers.
