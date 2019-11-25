@@ -1,6 +1,6 @@
 # mediastream-to-webm
 
-## Temporarily broken - the MediaRecorder API has dramatically changed it's WebM format
+## Temporarily broken in Firefox.
 
 Converts MediaStreams to live WebM streams. Currently only for Chrome.
 
