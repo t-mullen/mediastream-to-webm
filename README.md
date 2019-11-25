@@ -1,7 +1,5 @@
 # mediastream-to-webm
 
-## Temporarily broken in Firefox.
-
 Converts MediaStreams to live WebM streams. Currently only for Chrome.
 
 Allows you to send video/audio as a single outgoing data stream to many peers.
